@@ -1,33 +1,68 @@
 <!-- HEADER FLUTUANTE -->
 <header class="fixed top-0 w-full bg-[#1e130c] text-[#e8dac2] z-50 shadow-md">
-  <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
     <!-- Logo -->
-    <div class="flex flex-col items-center cursor-pointer" (click)="scrollTo('inicio')">
-      <span class="font-serif text-4xl font-bold tracking-widest text-[#d8b082]">DO</span>
-      <span class="font-serif text-xl tracking-[0.2em]">DAVANZZO</span>
-      <span class="text-xs uppercase opacity-70 tracking-wider border-t border-[#d8b082]/30 mt-1 pt-1">- Contabilidade & Regularizações -</span>
-    </div>
+    <button type="button" class="flex flex-col items-center cursor-pointer" (click)="scrollTo('inicio')" aria-label="Davanzzo - ir para o início">
+      @if (logoOk()) {
+        <!-- Arquivo: public/images/logo.png (PNG com fundo transparente) -->
+        <img src="images/logo.png" alt="Davanzzo Contabilidade & Regularizações" class="h-14 md:h-[4.5rem] w-auto" (error)="logoOk.set(false)">
+      } @else {
+        <!-- Logo em texto (aparece enquanto não houver imagem) -->
+        <span class="font-serif text-4xl font-bold tracking-widest text-[#d8b082]">DC</span>
+        <span class="font-serif text-xl tracking-[0.2em]">DAVANZZO</span>
+        <span class="text-xs uppercase opacity-70 tracking-wider border-t border-[#d8b082]/30 mt-1 pt-1">- Contabilidade & Regularizações -</span>
+      }
+    </button>
 
     <!-- Menu de Navegação -->
-    <nav class="hidden md:flex gap-8 font-sans text-base tracking-wide">
+    <nav class="hidden md:flex gap-5 lg:gap-8 font-sans text-sm lg:text-base tracking-wide">
       <button (click)="scrollTo('inicio')" class="hover:text-[#d8b082] transition border-b-2 border-[#d8b082]">Início</button>
       <button (click)="scrollTo('servicos')" class="hover:text-[#d8b082] transition border-b-2 border-transparent">Serviços</button>
       <button (click)="scrollTo('diferenciais')" class="hover:text-[#d8b082] transition border-b-2 border-transparent">Diferenciais</button>
+      <button (click)="scrollTo('como-funciona')" class="hover:text-[#d8b082] transition border-b-2 border-transparent">Como funciona</button>
       <button (click)="scrollTo('contato')" class="hover:text-[#d8b082] transition border-b-2 border-transparent">Contato</button>
     </nav>
 
-    <!-- Botão Fale Conosco -->
-    <button (click)="abrirWhatsapp()" class="border border-[#d8b082] text-[#d8b082] px-6 py-2.5 rounded-full flex items-center gap-2 hover:bg-[#d8b082] hover:text-[#1e130c] transition font-sans text-base">
+    <!-- Botão Fale Conosco (somente desktop) -->
+    <button (click)="abrirWhatsapp()" class="hidden md:flex border border-[#d8b082] text-[#d8b082] px-6 py-2.5 rounded-full items-center gap-2 hover:bg-[#d8b082] hover:text-[#1e130c] transition font-sans text-base">
       <i class="fa-brands fa-whatsapp text-lg"></i>
       Fale conosco
     </button>
+
+    <!-- Botão hambúrguer (somente mobile) -->
+    <button
+      type="button"
+      (click)="alternarMenu()"
+      class="md:hidden text-[#d8b082] text-3xl w-12 h-12 flex items-center justify-center rounded-lg hover:bg-white/10 transition"
+      [attr.aria-expanded]="menuAberto()"
+      aria-controls="menu-mobile"
+      [attr.aria-label]="menuAberto() ? 'Fechar menu' : 'Abrir menu'">
+      <i [class]="menuAberto() ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"></i>
+    </button>
   </div>
+
+  <!-- Menu mobile -->
+  @if (menuAberto()) {
+    <nav id="menu-mobile" class="md:hidden bg-[#1e130c] border-t border-[#d8b082]/20 px-6 pb-6 pt-2 font-sans text-lg shadow-xl">
+      <ul class="flex flex-col">
+        <li><button (click)="scrollTo('inicio')" class="w-full text-left py-4 border-b border-white/10 hover:text-[#d8b082] transition">Início</button></li>
+        <li><button (click)="scrollTo('servicos')" class="w-full text-left py-4 border-b border-white/10 hover:text-[#d8b082] transition">Serviços</button></li>
+        <li><button (click)="scrollTo('diferenciais')" class="w-full text-left py-4 border-b border-white/10 hover:text-[#d8b082] transition">Diferenciais</button></li>
+        <li><button (click)="scrollTo('como-funciona')" class="w-full text-left py-4 border-b border-white/10 hover:text-[#d8b082] transition">Como funciona</button></li>
+        <li><button (click)="scrollTo('contato')" class="w-full text-left py-4 border-b border-white/10 hover:text-[#d8b082] transition">Contato</button></li>
+      </ul>
+      <button (click)="abrirWhatsapp()" class="mt-6 w-full bg-[#d8b082] text-[#1e130c] px-6 py-3.5 rounded-full flex items-center justify-center gap-2 hover:bg-white transition font-medium">
+        <i class="fa-brands fa-whatsapp text-xl"></i>
+        Fale conosco
+      </button>
+    </nav>
+  }
 </header>
 
 <!-- SEÇÃO: INÍCIO (HERO) COM IMAGEM DE FUNDO -->
 <!-- Note que usei um 'linear-gradient' junto com a 'url()' da imagem para escurecer o fundo e dar contraste -->
 <section id="inicio" class="relative pt-40 pb-28 px-6 text-white min-h-[85vh] flex items-center bg-cover bg-center" 
-         style="background-image: linear-gradient(to right, rgba(49, 32, 21, 0.95) 20%, rgba(49, 32, 21, 0.6) 100%), url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1920&auto=format&fit=crop');">
+         style="background-image: linear-gradient(to right, rgba(49, 32, 21, 0.95) 20%, rgba(49, 32, 21, 0.6) 100%), url('images/hero.jpg');">
   <div class="max-w-7xl mx-auto w-full grid md:grid-cols-2 gap-8 items-center">
     
     <div class="space-y-6 z-10">
@@ -66,71 +101,32 @@
     <div class="w-20 h-[2px] bg-[#d8b082] mx-auto mb-6"></div>
     <p class="font-sans text-lg text-[#5c4a3d] mb-16">Soluções completas para você e o seu negócio.</p>
 
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-y-16 gap-x-6">
-      <div class="flex flex-col items-center">
-        <div class="w-20 h-20 bg-[#eae1d5] rounded-xl flex items-center justify-center mb-5 border border-[#d8b082]/30">
-          <i class="fa-solid fa-file-invoice-dollar text-4xl text-[#4a3625]"></i>
-        </div>
-        <p class="font-sans text-base text-[#4a3625] font-medium">IRPF <br>Imposto de Renda<br>Pessoa Física</p>
-      </div>
-
-      <div class="flex flex-col items-center">
-        <div class="w-20 h-20 bg-[#eae1d5] rounded-xl flex items-center justify-center mb-5 border border-[#d8b082]/30">
-          <i class="fa-solid fa-city text-4xl text-[#4a3625]"></i>
-        </div>
-        <p class="font-sans text-base text-[#4a3625] font-medium">Abertura, alteração, <br>transformação e <br>encerramento de empresas</p>
-      </div>
-
-      <div class="flex flex-col items-center">
-        <div class="w-20 h-20 bg-[#eae1d5] rounded-xl flex items-center justify-center mb-5 border border-[#d8b082]/30">
-          <i class="fa-regular fa-circle-check text-4xl text-[#4a3625]"></i>
-        </div>
-        <p class="font-sans text-base text-[#4a3625] font-medium">Regularizações <br>e pendências</p>
-      </div>
-
-      <div class="flex flex-col items-center">
-        <div class="w-20 h-20 bg-[#eae1d5] rounded-xl flex items-center justify-center mb-5 border border-[#d8b082]/30">
-          <i class="fa-solid fa-id-card-clip text-4xl text-[#4a3625]"></i>
-        </div>
-        <p class="font-sans text-base text-[#4a3625] font-medium">Certificado <br>digital</p>
-      </div>
-
-      <div class="flex flex-col items-center">
-        <div class="w-20 h-20 bg-[#eae1d5] rounded-xl flex items-center justify-center mb-5 border border-[#d8b082]/30">
-          <i class="fa-regular fa-lightbulb text-4xl text-[#4a3625]"></i>
-        </div>
-        <p class="font-sans text-base text-[#4a3625] font-medium">Marcas e <br>patentes</p>
-      </div>
-      
-      <div class="col-span-2 md:col-span-5 flex flex-wrap justify-center gap-16 mt-4">
-        <div class="flex flex-col items-center w-48">
-          <div class="w-20 h-20 bg-[#eae1d5] rounded-xl flex items-center justify-center mb-5 border border-[#d8b082]/30">
-            <i class="fa-solid fa-gavel text-4xl text-[#4a3625]"></i>
+    <!-- grid-flow-dense: o resumo (col-span-full) abre logo abaixo da linha do item clicado -->
+    <div class="grid grid-cols-2 md:grid-cols-10 gap-4 grid-flow-dense max-w-6xl mx-auto">
+      @for (servico of servicos; track $index) {
+        <button
+          type="button"
+          (click)="selecionarServico($index)"
+          [attr.aria-expanded]="servicoAtivo() === $index"
+          [class]="'flex flex-col items-center justify-center min-h-[13rem] px-3 py-6 rounded-xl border cursor-pointer transition duration-300 hover:border-[#d8b082] hover:bg-[#eae1d5] hover:shadow-lg hover:-translate-y-1 focus:outline-none focus-visible:border-[#d8b082] '
+            + 'md:col-span-2 '
+            + ($last ? 'col-span-2 ' : '')
+            + ($index === 5 ? 'md:col-start-2 ' : '')
+            + (servicoAtivo() === $index ? 'border-[#d8b082] bg-[#eae1d5] shadow-lg' : 'border-transparent')">
+          <div class="w-20 h-20 rounded-xl flex items-center justify-center mb-5 border border-[#d8b082]/30 transition"
+               [class.bg-[#4a3625]]="servicoAtivo() === $index"
+               [class.bg-[#eae1d5]]="servicoAtivo() !== $index">
+            <i [class]="servico.icone + ' text-4xl ' + (servicoAtivo() === $index ? 'text-[#d8b082]' : 'text-[#4a3625]')"></i>
           </div>
-          <p class="font-sans text-base text-[#4a3625] font-medium">Perícia e <br>assistência técnica</p>
-        </div>
+          <span class="font-sans text-base text-[#4a3625] font-medium" [innerHTML]="servico.titulo"></span>
+        </button>
 
-        <div class="flex flex-col items-center w-48">
-          <div class="w-20 h-20 bg-[#eae1d5] rounded-xl flex items-center justify-center mb-5 border border-[#d8b082]/30">
-            <i class="fa-solid fa-piggy-bank text-4xl text-[#4a3625]"></i>
+        @if (servicoAtivo() === $index) {
+          <div class="col-span-full border border-[#d8b082] rounded-xl bg-[#eae1d5] p-6 md:p-8 text-left md:text-center shadow-lg" aria-live="polite">
+            <p class="font-sans text-base text-[#4a3625] leading-relaxed">{{ servico.resumo }}</p>
           </div>
-          <p class="font-sans text-base text-[#4a3625] font-medium">Apoio administrativo <br>e financeiro</p>
-        </div>
-
-        <div class="flex flex-col items-center w-48">
-          <div class="w-20 h-20 bg-[#eae1d5] rounded-xl flex items-center justify-center mb-5 border border-[#d8b082]/30">
-            <i class="fa-solid fa-users text-4xl text-[#4a3625]"></i>
-          </div>
-          <p class="font-sans text-base text-[#4a3625] font-medium">Departamento pessoal <br>(Trabalhista)</p>
-        </div>
-
-        <div class="flex flex-col items-center w-48">
-          <div class="w-20 h-20 bg-[#eae1d5] rounded-xl flex items-center justify-center mb-5 border border-[#d8b082]/30">
-            <i class="fa-solid fa-chart-line text-4xl text-[#4a3625]"></i>
-          </div>
-          <p class="font-sans text-base text-[#4a3625] font-medium">Consultoria contábil, <br>fiscal e tributária</p>
-        </div>
-      </div>
+        }
+      }
     </div>
   </div>
 </section>
@@ -142,48 +138,103 @@
     <div class="w-20 h-[2px] bg-white/20 mx-auto mb-6"></div>
     <p class="font-sans text-lg text-gray-300 mb-16">Mais do que contabilidade, um parceiro para o seu crescimento.</p>
 
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-8 items-stretch">
-      <div class="flex flex-col items-center justify-center p-4">
-        <i class="fa-solid fa-user-tie text-5xl text-white mb-6"></i>
-        <h3 class="font-sans text-lg font-medium mb-2">Atendimento<br>personalizado<br>e próximo</h3>
-      </div>
-      
-      <div class="flex flex-col items-center border border-[#d8b082] rounded-xl p-8 bg-[#3a2516] shadow-xl">
-        <i class="fa-solid fa-hand-holding-dollar text-5xl text-white mb-6"></i>
-        <h3 class="font-sans text-base font-bold uppercase text-[#d8b082] mb-4">Honorários fixos,<br>sem surpresas.</h3>
-        <p class="font-sans text-sm text-gray-300 leading-relaxed">Nossos pacotes incluem os serviços contábeis básicos, sem cobranças adicionais por cada guia emitida, recálculo ou declaração prevista no plano.</p>
-      </div>
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-start">
+      @for (item of diferenciais; track $index) {
+        <div class="flex flex-col">
+          <button
+            type="button"
+            (click)="selecionarDiferencial($index)"
+            [attr.aria-expanded]="diferencialAtivo() === $index"
+            class="w-full h-60 flex flex-col items-center justify-center px-6 md:px-3 py-6 rounded-xl border cursor-pointer transition duration-300 hover:border-[#d8b082] hover:bg-[#3a2516] hover:shadow-xl hover:-translate-y-1 focus:outline-none focus-visible:border-[#d8b082]"
+            [class.border-[#d8b082]]="diferencialAtivo() === $index"
+            [class.bg-[#3a2516]]="diferencialAtivo() === $index"
+            [class.shadow-xl]="diferencialAtivo() === $index"
+            [class.border-transparent]="diferencialAtivo() !== $index">
+            <i [class]="item.icone + ' text-5xl mb-6 transition ' + (diferencialAtivo() === $index ? 'text-[#d8b082]' : 'text-white')"></i>
+            <h3 class="font-sans text-lg font-medium" [class.text-[#d8b082]]="diferencialAtivo() === $index" [innerHTML]="item.titulo"></h3>
+          </button>
 
-      <div class="flex flex-col items-center justify-center p-4">
-        <i class="fa-regular fa-calendar-check text-5xl text-white mb-6"></i>
-        <h3 class="font-sans text-lg font-medium mb-2">Compromisso<br>com prazos<br>e resultados</h3>
-      </div>
+          <!-- Resumo logo abaixo do item (somente mobile) -->
+          @if (diferencialAtivo() === $index) {
+            <div class="md:hidden mt-3 border border-[#d8b082] rounded-xl bg-[#3a2516] p-6 shadow-xl" aria-live="polite">
+              <p class="font-sans text-base text-gray-200 leading-relaxed">{{ item.resumo }}</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
 
-      <div class="flex flex-col items-center justify-center p-4">
-        <i class="fa-solid fa-arrow-trend-up text-5xl text-white mb-6"></i>
-        <h3 class="font-sans text-lg font-medium mb-2">Experiência e<br>atualização constante</h3>
-      </div>
-
-      <div class="flex flex-col items-center justify-center p-4">
-        <i class="fa-regular fa-handshake text-5xl text-white mb-6"></i>
-        <h3 class="font-sans text-lg font-medium mb-2">Transparência<br>em todas as etapas</h3>
-      </div>
+    <!-- Resumo abaixo da linha de itens (somente desktop) -->
+    <div class="hidden md:block mt-10 max-w-3xl mx-auto border border-[#d8b082] rounded-xl bg-[#3a2516] p-8 shadow-xl" aria-live="polite">
+      <p class="font-sans text-base text-gray-200 leading-relaxed">{{ diferenciais[diferencialAtivo()].resumo }}</p>
     </div>
   </div>
 </section>
 
-<!-- SEÇÃO: CONTATO / FOOTER -->
-<section id="contato" class="bg-[#f5f1eb] py-20 px-6">
-  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
-    <div class="mb-10 md:mb-0 text-center md:text-left">
-      <h2 class="font-['Caveat'] text-6xl md:text-7xl text-[#4a3625] mb-4">Vamos conversar?</h2>
-      <p class="font-sans text-lg text-[#5c4a3d]">Será um prazer entender sua necessidade<br>e encontrar a melhor solução para você.</p>
+<!-- SEÇÃO: COMO FUNCIONA -->
+<section id="como-funciona" class="bg-[#ebe3d6] py-24 px-6 text-center">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="font-serif text-4xl tracking-widest text-[#4a3625] uppercase mb-3">Como Funciona</h2>
+    <div class="w-20 h-[2px] bg-[#d8b082] mx-auto mb-6"></div>
+    <p class="font-sans text-lg text-[#5c4a3d] mb-16">Do primeiro contato ao dia a dia, em poucos passos simples.</p>
+
+    <div class="relative grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-6">
+      <!-- Linha que liga os passos (somente desktop) -->
+      <div class="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-px bg-[#d8b082]" aria-hidden="true"></div>
+
+      @for (passo of passos; track $index) {
+        <div class="relative flex flex-col items-center px-2">
+          <div class="relative z-10 w-16 h-16 rounded-full bg-[#4a3625] border-2 border-[#d8b082] text-[#d8b082] flex items-center justify-center font-serif text-2xl font-bold shadow-lg mb-6">
+            {{ $index + 1 }}
+          </div>
+          <i [class]="passo.icone + ' text-3xl text-[#4a3625] mb-4'"></i>
+          <h3 class="font-sans text-lg font-semibold text-[#4a3625] mb-2">{{ passo.titulo }}</h3>
+          <p class="font-sans text-base text-[#5c4a3d] leading-relaxed max-w-xs">{{ passo.descricao }}</p>
+        </div>
+      }
     </div>
-    
-    <button (click)="abrirWhatsapp()" class="bg-[#1e130c] text-white px-10 py-5 rounded-full flex items-center justify-center gap-3 hover:bg-[#3a2516] transition font-sans text-base w-full md:w-auto shadow-lg">
+
+    <button (click)="abrirWhatsapp()" class="mt-16 bg-[#1e130c] text-white px-10 py-4 rounded-full inline-flex items-center justify-center gap-3 hover:bg-[#3a2516] transition font-sans text-base shadow-lg">
       <i class="fa-brands fa-whatsapp text-2xl"></i>
-      Fale conosco via WhatsApp >
+      Começar pelo WhatsApp
     </button>
+  </div>
+</section>
+
+<!-- SEÇÃO: CONTATO -->
+<section id="contato" class="bg-[#f5f1eb] py-20 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex flex-col md:flex-row items-center justify-between">
+      <div class="mb-10 md:mb-0 text-center md:text-left">
+        <h2 class="font-['Caveat'] text-6xl md:text-7xl text-[#4a3625] mb-4">Vamos conversar?</h2>
+        <p class="font-sans text-lg text-[#5c4a3d]">Será um prazer entender sua necessidade<br>e encontrar a melhor solução para você.</p>
+      </div>
+
+      <button (click)="abrirWhatsapp()" class="bg-[#1e130c] text-white px-10 py-5 rounded-full flex items-center justify-center gap-3 hover:bg-[#3a2516] transition font-sans text-base w-full md:w-auto shadow-lg">
+        <i class="fa-brands fa-whatsapp text-2xl"></i>
+        Fale conosco via WhatsApp >
+      </button>
+    </div>
+
+    <!-- Dados de contato (editáveis em "contato" no app.ts) -->
+    <div class="grid grid-cols-2 gap-x-6 gap-y-8 lg:flex lg:flex-nowrap lg:justify-between lg:gap-x-6 mt-16 pt-12 border-t border-[#d8b082]/40 text-left">
+      <a [href]="'tel:+' + contato.whatsapp" class="flex flex-col lg:flex-row items-start gap-3 lg:gap-4 group">
+        <span class="w-12 h-12 shrink-0 rounded-full bg-[#eae1d5] border border-[#d8b082]/40 flex items-center justify-center text-[#4a3625] group-hover:bg-[#4a3625] group-hover:text-[#d8b082] transition"><i class="fa-solid fa-phone"></i></span>
+        <span class="font-sans text-sm text-[#4a3625]"><strong class="block text-sm uppercase tracking-wider text-[#8a6d4b]">Telefone</strong>{{ contato.telefone }}</span>
+      </a>
+      <a [href]="'mailto:' + contato.email" class="flex flex-col lg:flex-row items-start gap-3 lg:gap-4 group">
+        <span class="w-12 h-12 shrink-0 rounded-full bg-[#eae1d5] border border-[#d8b082]/40 flex items-center justify-center text-[#4a3625] group-hover:bg-[#4a3625] group-hover:text-[#d8b082] transition"><i class="fa-regular fa-envelope"></i></span>
+        <span class="font-sans text-sm text-[#4a3625] break-all lg:break-normal min-w-0"><strong class="block text-sm uppercase tracking-wider text-[#8a6d4b]">E-mail</strong>{{ contato.email }}</span>
+      </a>
+      <div class="flex flex-col lg:flex-row items-start gap-3 lg:gap-4">
+        <span class="w-12 h-12 shrink-0 rounded-full bg-[#eae1d5] border border-[#d8b082]/40 flex items-center justify-center text-[#4a3625]"><i class="fa-solid fa-location-dot"></i></span>
+        <span class="font-sans text-sm text-[#4a3625] lg:max-w-[14rem]"><strong class="block text-sm uppercase tracking-wider text-[#8a6d4b]">Endereço</strong>{{ contato.endereco }}</span>
+      </div>
+      <div class="flex flex-col lg:flex-row items-start gap-3 lg:gap-4">
+        <span class="w-12 h-12 shrink-0 rounded-full bg-[#eae1d5] border border-[#d8b082]/40 flex items-center justify-center text-[#4a3625]"><i class="fa-regular fa-clock"></i></span>
+        <span class="font-sans text-sm text-[#4a3625]"><strong class="block text-sm uppercase tracking-wider text-[#8a6d4b]">Horário</strong>{{ contato.horario }}</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -191,20 +242,32 @@
 <footer class="bg-[#1a0f08] py-10 px-6 text-white border-t border-white/10">
   <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
     <div class="flex flex-col items-center">
-      <span class="font-serif text-3xl font-bold tracking-widest text-[#d8b082]">DO</span>
-      <span class="font-serif text-lg tracking-[0.2em]">DAVANZZO</span>
-      <span class="text-[10px] uppercase opacity-70 tracking-wider mt-1">- Contabilidade & Regularizações -</span>
+      @if (logoOk()) {
+        <img src="images/logo.png" alt="Davanzzo Contabilidade & Regularizações" class="h-24 w-auto">
+      } @else {
+        <span class="font-serif text-3xl font-bold tracking-widest text-[#d8b082]">DC</span>
+        <span class="font-serif text-lg tracking-[0.2em]">DAVANZZO</span>
+        <span class="text-[10px] uppercase opacity-70 tracking-wider mt-1">- Contabilidade & Regularizações -</span>
+      }
     </div>
-    
+
     <div class="font-sans text-sm tracking-[0.15em] text-gray-400 flex flex-wrap justify-center gap-3 md:gap-5 text-center">
       <span>ORGANIZAÇÃO</span> <span class="text-[#d8b082]">•</span>
       <span>PLANEJAMENTO</span> <span class="text-[#d8b082]">•</span>
       <span>CRESCIMENTO</span> <span class="text-[#d8b082]">•</span>
       <span>TRANSPARÊNCIA</span>
     </div>
-    
-    <div class="font-['Caveat'] text-3xl text-white text-right leading-none">
-      Juntos <br>pelo seu <br>crescimento <span class="text-[#d8b082]">♡</span>
+
+    <div class="flex items-center gap-6">
+      <a [href]="'https://instagram.com/' + contato.instagram" target="_blank" rel="noopener" aria-label="Instagram" class="text-3xl text-gray-300 hover:text-[#d8b082] transition"><i class="fa-brands fa-instagram"></i></a>
+      <div class="font-['Caveat'] text-3xl text-white text-right leading-none">
+        Juntos <br>pelo seu <br>crescimento <span class="text-[#d8b082]">♡</span>
+      </div>
     </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto mt-8 pt-6 border-t border-white/10 font-sans text-xs text-gray-500 text-center leading-relaxed">
+    {{ contato.razaoSocial }} · CNPJ {{ contato.cnpj }} · {{ contato.crc }}<br>
+    © {{ anoAtual }} Davanzzo. Todos os direitos reservados.
   </div>
 </footer>
